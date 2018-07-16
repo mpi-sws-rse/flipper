@@ -21,6 +21,7 @@ const initialState = {
   //exampleQuery: "add red 3 times",
   defineN: null,
   dictionary: [],
+  unparsable: "",
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -41,7 +42,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, responses: action.responses, history: history, current_history_idx: -1, status: STATUS.ACCEPT }
     case Constants.ACCEPT:
       const newHistory = [...state.history, action.el]
-      return { ...state, history: newHistory, responses: [], status: STATUS.TRY, query: "" }
+      return { ...state, history: newHistory, responses: [], status: STATUS.TRY, query: "", unparsable: "" }
     case Constants.DEFINE:
       // TODO The "value" here will have to be changed
       let collapsedHistory = [...state.history.slice(0, action.idx), {
@@ -112,6 +113,10 @@ export default function reducer(state = initialState, action = {}) {
       return { ...initialState, dictionary: state.dictionary}
     case Constants.DICTIONARY:
       return { ...state, dictionary: action.dictionary}
+    case Constants.UNPARSABLE:
+    	return {...state, unparsable: action.unparsable}
+    case Constants.PARSABLE:
+    	return {...state, unparsable: initialState.unparsable}
     default:
       return state
   }
