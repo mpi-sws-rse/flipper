@@ -268,6 +268,49 @@ const Actions = {
         })
     }
   },
+
+  /* @author: Akshal Aniche
+   * define unparsable utterance to be the selected parsable utterance produced by extended parsing
+   */
+  defineUnparsable: (selectedIdx) => {
+	  return (dispatch, getState) => {
+	      const { sessionId } = getState().user
+	      const { responses, unparsable } = getState().world
+
+	      const defineHist = [responses[selectedIdx]].map(el => [el.utterance, el.formula])
+	      
+	      console.log(defineHist)
+	      
+      const sempreQuery = `(:def "${unparsable}" ${JSON.stringify(JSON.stringify(defineHist))})`
+      		  console.log(sempreQuery)
+      	  /* Submit the define command */
+	      SEMPREquery({ q: sempreQuery, sessionId: sessionId })
+	        .then((r) => {
+	          if (r.lines && r.lines.length > 0) {
+	            /* Display errors and quit if there errors */
+	            alert(`There were error(s) in this definition: ${r.lines.join(", ")}`)
+	            return
+	          }
+	
+	          const { formula: topFormula } = r.candidates[0]
+	          
+	          dispatch(Logger.log({ type: "define", msg: { defineAs: unparsable, idx: 0, length: defineHist.length, formula: topFormula } }))
+	
+	          dispatch({
+	            type: Constants.DEFINE,
+	            text: unparsable,
+	            idx: 0,
+	            formula: topFormula
+	          })
+	        })
+	        
+	        //reset unparsable
+	        dispatch({
+	      		type: Constants.UNPARSABLE,
+	      		unparsable: ""
+	      	  })
+	  }
+  },
   
   revert: (idx) => {
     return (dispatch) => {
