@@ -87,7 +87,7 @@ const Actions = {
         type: Constants.SET_STATUS,
         status: STATUS.LOADING
       })
-
+      
       return sendContext(history, current_history_idx, sessionId)
         .then((eh) => {
           //q = processMacros(q);
@@ -126,6 +126,19 @@ const Actions = {
                   responses: responses
                 })
 
+                //unparsable utterance, set up the definition
+                if (response.stats.unparsableUtterance !== undefined) {
+                	dispatch({
+                		type: Constants.UNPARSABLE,
+                		unparsable: response.stats.unparsableUtterance,
+                		
+                	})
+                }
+                else {
+                	dispatch({
+                		type: Constants.PARSABLE,
+                	})
+                }
                 return true
               }
             })
@@ -232,7 +245,7 @@ const Actions = {
 
       //const processed = processMacros(defineAs);
       const sempreQuery = `(${mode} "${/*processed*/defineAs}" ${JSON.stringify(JSON.stringify(defineHist))})`
-
+      
       /* Submit the define command */
       SEMPREquery({ q: sempreQuery, sessionId: sessionId })
         .then((r) => {
@@ -255,7 +268,7 @@ const Actions = {
         })
     }
   },
-
+  
   revert: (idx) => {
     return (dispatch) => {
       dispatch(Logger.log({ type: "revert", msg: { idx: idx } }))
