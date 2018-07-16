@@ -31,6 +31,7 @@ function combine(vsTmp, v) {
     vs.status = v.status;
     vs.formula = v.formula;
     vs.formulas = [vs.formula];
+    vs.utterance = v.utterance;
     vs.prob = parseFloat(v.prob);
     vs.probs = [v.prob];
     vs.pprob = parseFloat(v.pprob);
@@ -75,6 +76,7 @@ export function parseSEMPRE(valid) {
       qapair.rank = i;
       qapair.prob = valid[i].prob;
       qapair.pprob = valid[i].pprob;
+      qapair.utterance = valid[i].utterance;
       lstqapairs.push(qapair);
     } catch (e) {
       lstqapairs.push({ path: [], formula: "", rank: i, error: valid[i].value, score: 0, prob: 0, pprob: 0 })
