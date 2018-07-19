@@ -124,10 +124,17 @@ class Build extends Component {
           this.setState({ selectedResp: 0 })
           return
         }
+        
+      //if unparsable, define
+        if (this.props.unparsable !== "") {
+        	console.log("Defining unparsable")
+        	this.props.dispatch(Actions.defineUnparsable(this.state.selectedResp))	
+        }
 
         /* Otherwise, just accept normally */
         //const r = this.props.dispatch(Actions.accept(query, this.state.selectedResp))
         const r = this.props.dispatch(Actions.acceptPath(query, this.state.selectedResp))
+        
         if (r)
           this.setState({ selectedResp: 0 })
 
@@ -280,7 +287,8 @@ const mapStateToProps = (state) => ({
   pointMarkers: state.world.pointMarkers,
   defineN: state.world.defineN,
   //popup: state.world.popup,
-  current_history_idx: state.world.current_history_idx
+  current_history_idx: state.world.current_history_idx,
+  unparsable: state.world.unparsable,
 })
 
 export default connect(mapStateToProps)(Build)
