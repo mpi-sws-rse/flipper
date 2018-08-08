@@ -212,6 +212,7 @@ class Build extends Component {
     let robot = history[idx].robot;
     let currentPath = [];// = history[idx].path;
 
+    let interpretation = "";
     let popup = { text: "", active: false };
     if (status === STATUS.ACCEPT && !responses[this.state.selectedResp].error) {
       /* If the status is accept, then the current state will be the diff
@@ -219,6 +220,7 @@ class Build extends Component {
       //currentState = diff(currentState, responses[this.state.selectedResp].value)
       let response = JSON.parse(JSON.stringify(responses[this.state.selectedResp])); 
       currentPath = response.path;
+      interpretation = response.prettyString;
       //currentPath = JSON.parse(JSON.stringify(responses[this.state.selectedResp].path));
       if (response.status.length === 0) {
         popup.active = false;
@@ -227,7 +229,7 @@ class Build extends Component {
         popup.active = true;
       }
     }
-
+    
     return (
       <div className="Build">
         <div className="Build-info" >
@@ -246,7 +248,7 @@ class Build extends Component {
             isoConfig={{ canvasWidth: 1650, canvasHeight: 1200, numUnits: 40 }} />
         </div>
         <div className="Build-command">
-          <History />
+          <History interpretation={interpretation}/>
           <ActionPopup
             active={popup.active}
             text={popup.text} />

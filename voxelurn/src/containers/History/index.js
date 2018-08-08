@@ -19,7 +19,6 @@ class HistoryItem extends Component {
 
   render() {
     const { text, stepN, selected, defining, firstDefining, revert, setDefineN, resetDefineN, openDefine, doubleClick, tentative, last, remove, setPin } = this.props
-
     return (
       <div
         onClick={() => revert()}
@@ -42,7 +41,7 @@ class HistoryItem extends Component {
             <button onClick={(e) => { e.stopPropagation(); setPin() }}>{DEFINE_THIS}</button>
           }
         </div>
-      </div>
+		</div>
     )
   }
 }
@@ -78,6 +77,7 @@ class History extends Component {
     defining: PropTypes.bool,
     query: PropTypes.string,
     status: PropTypes.string,
+    interpretation: PropTypes.string,
 
     dispatch: PropTypes.func
   }
@@ -103,6 +103,8 @@ class History extends Component {
       return true
     } else if (this.props.history[this.props.history.length - 1].type !== nextProps.history[nextProps.history.length - 1].type) {
       /* update if define this button has been clicked */
+      return true
+    } else if (this.props.interpretation !== nextProps.interpretation){
       return true
     }
 
@@ -160,8 +162,7 @@ class History extends Component {
   }
 
   render() {
-    const { history, current_history_idx, defineN, defining, status, query } = this.props
-
+    const { history, current_history_idx, defineN, defining, status, query, interpretation} = this.props
     const lastPinIdx = history.length - 1 - history.slice().reverse().findIndex(h => h.type === "pin")
 
     return (
@@ -200,17 +201,26 @@ class History extends Component {
           )
         })}
         {status === STATUS.ACCEPT &&
-          <HistoryItem
-            key="new"
-            text={query}
-            stepN={history.length + 1}
-            revert={() => this.setPin()}
-            openDefine={() => this.setPin()}
-            setPin={() => this.setPin()}
-            tentative
-            setDefineN={() => { }}
-            resetDefineN={() => { }}
-          />
+         <div style={{display:'flex'}}>
+          	<HistoryItem
+            	key="new"
+            	text={query}
+            	stepN={history.length + 1}
+            	revert={() => this.setPin()}
+           	 	openDefine={() => this.setPin()}
+            	setPin={() => this.setPin()}
+            	tentative
+            	setDefineN={() => { }}
+            	resetDefineN={() => { }}
+          	/>
+          	<div className="HistoryItem-inter">
+          		<text>
+          			Interpretation:
+          			<br />
+          			{interpretation}
+          	   </text>
+          	 </div>
+          </div>
         }
       </div>
     )
