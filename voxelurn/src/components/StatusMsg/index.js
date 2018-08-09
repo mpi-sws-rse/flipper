@@ -3,10 +3,10 @@ import { STATUS, TRY_MSG, ACCEPT_MSG, DEFINE_MSG } from "constants/strings"
 
 import "./styles.css"
 
-const StatusMsg = ({ status }) => {
+const StatusMsg = ({ status, text }) => {
   let msg = TRY_MSG
   if (status === STATUS.ACCEPT) {
-    msg = ACCEPT_MSG
+    msg = text
   } else if (status === STATUS.DEFINE) {
     msg = DEFINE_MSG
   }
