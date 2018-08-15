@@ -194,7 +194,7 @@ const Actions = {
       selected.worldMap = currentState.worldMap;
       selected.robot = currentState.robot;
       
-      const query = `(:accept ${JSON.stringify(text)} ${selected.formulas.map(f => JSON.stringify(f)).join(" ")})`
+      const query = `(:accept ${JSON.stringify(text)} ${JSON.stringify(selected.formula)})`
       SEMPREquery({ q: query, sessionId: sessionId }, () => { })
 
 
